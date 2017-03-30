@@ -9,6 +9,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import hoistStatics from 'hoist-non-react-statics';
+import emptyFunction from '../../node_modules/fbjs/lib/emptyFunction';
 
 const contextTypes = {
   insertCss: PropTypes.func,
@@ -18,7 +19,8 @@ function withStyles(...styles) {
   return function wrapWithStyles(ComposedComponent) {
     class WithStyles extends Component {
       componentWillMount() {
-        this.removeCss = this.context.insertCss.apply(undefined, styles);
+        const insertCss = this.context.insertCss || emptyFunction;
+        this.removeCss = insertCss.apply(undefined, styles);
       }
 
       componentWillUnmount() {
